@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Cricket Kit Sales</title>
+
+  <h1> Information Visualization homework -8</h1>
+  <h2> by Yeswanth Sai Tirumalasetty</h2>
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+  <style>
+    /* todo: add styles */
+    .vertical-grid{
+    stroke:#ccc;
+    
+  }
+  
+  .ordinate-text{
+    font-size:10px;
+    transform:translateY(10px);
+  }
+  
+  div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: auto;
+    height: auto;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity:0;
+    padding:5px;
+  }
+  
+  .right-align{
+    position:absolute;
+    right:100px;
+    
+  }
+  .box,
+  .label{
+      display:inline-block;
+  }
+  
+  .box{
+    width:10px;
+    height:10px;
+    margin:0px 10px;
+  }
+  .body{
+    background-color: aqua;
+  }
+
+  h1{
+    text-align: center;
+  }
+  h2{
+    text-align: end;
+  }
+  </style>
+</head>
+<body>
+  <div class='tooltip'></div>
+  <div class='legend'>
+    <div class='right-align'>
+      <div class='box' style='background: blueviolet'></div>
+      <div class='label'>2021</div>
+      <div class='box' style='background:black'></div>
+      <div class='label' >2022</div>
+      <div class='box' style='background:yellowgreen'></div>
+      <div class='label' >2023</div>
+    </div>
+  </div>
+  <svg width="800" height="800"></svg>
+  <script src="app.js"></script>
+  <script>
+
+    const data=[
+    {
+      "date": "2021-12-31",
+      "product": "Cricket Bats",
+      "investment": 12121,
+      "sales": 17151.1,
+      "revenue": 2237.1
+    },
+    {
+      "date": "2021-12-31",
+      "product": "Cricket Bats",
+      "investment": 8452,
+      "sales": 10226.92,
+      "revenue": 1774.92
+    },
+    {
+      "date": "2023-12-31",
+      "product": "Cricket Bats",
+      "investment": 6114,
+      "sales": 7275.66,
+      "revenue": 1161.66
+    },
+    {
+      "date": "2021-12-31",
+      "product": "Cricket Balls",
+      "investment": 14617,
+      "sales": 17686.57,
+      "revenue": 3069.57
+    },
+    {
+      "date": "2022-12-31",
+      "product": "Cricket Balls",
+      "investment": 15029,
+      "sales": 15479.87,
+      "revenue": 450.87
+    },
+    {
+      "date": "2023-12-31",
+      "product": "Cricket Balls",
+      "investment": 13131,
+      "sales": 15231.96,
+      "revenue": 2100.96
+    },
+    {
+      "date": "2021-12-31",
+      "product": "Cricket Gloves",
+      "investment": 16614,
+      "sales": 19272.24,
+      "revenue": 2658.24
+    },
+    {
+      "date": "2022-12-31",
+      "product": "Cricket Gloves",
+      "investment": 861,
+      "sales": 1076.25,
+      "revenue": 215.25
+    },
+    {
+      "date": "2023-12-31",
+      "product": "Cricket Gloves",
+      "investment": 16818,
+      "sales": 17490.72,
+      "revenue": 672.72
+    },
+    {
+      "date": "2021-12-31",
+      "product": "Cricket Helmet",
+      "investment": 12688,
+      "sales": 14210.56,
+      "revenue": 1522
+    },
+    {
+      "date": "2022-12-31",
+      "product": "Cricket Helmet",
+      "investment": 6837,
+      "sales": 7725.81,
+      "revenue": 888.81
+    },
+    {
+      "date": "2023-12-31",
+      "product": "Cricket Helmet",
+      "investment": 5520,
+      "sales": 5685.6,
+      "revenue": 165.6
+    },
+    {
+      "date": "2021-12-31",
+      "product": "Cricket stumps",
+      "investment": 1027,
+      "sales": 1252.94,
+      "revenue": 225.94
+    },
+    {
+      "date": "2022-12-31",
+      "product": "Cricket stumps",
+      "investment": 10512,
+      "sales": 10827.36,
+      "revenue": 315.36
+    },
+    {
+      "date": "2023-12-31",
+      "product": "Cricket stumps",
+      "investment": 2485,
+      "sales": 2957.15,
+      "revenue": 472.15
+    },
+    {
+      "date": "2021-12-31",
+      "product": "Dressing Kit",
+      "investment": 1990,
+      "sales": 2407.9,
+      "revenue": 417.9
+    },
+    {
+      "date": "2022-12-31",
+      "product": "Dressing Kit",
+      "investment": 8034,
+      "sales": 9399.78,
+      "revenue": 1365.78
+    },
+    {
+      "date": "2023-12-31",
+      "product": "Dressing Kit",
+      "investment": 13254,
+      "sales": 14314.32,
+      "revenue": 1060.32
+    },
+    {
+      "date": "2021-12-31",
+      "product": "Paper Towels",
+      "investment": 18545,
+      "sales": 21141.3,
+      "revenue": 2596.3
+    },
+    {
+      "date": "2022-12-31",
+      "product": "Paper Towels",
+      "investment": 6168,
+      "sales": 7524.96,
+      "revenue": 1356.96
+    },
+    {
+      "date": "2023-12-31",
+      "product": "Paper Towels",
+      "investment": 12382,
+      "sales": 14610.76,
+      "revenue": 2228.76
+    },
+    {
+      "date": "2021-12-31",
+      "product": "Cricket pads",
+      "investment": 12498,
+      "sales": 14622.66,
+      "revenue": 2124.66,
+      "revenueper": 17
+    },
+    {
+      "date": "2022-12-31",
+      "product": "Cricket pads",
+      "investment": 8214,
+      "sales": 8953.26,
+      "revenue": 739.26
+    },
+    {
+      "date": "2023-12-31",
+      "product": "Cricket pads",
+      "investment": 3361,
+      "sales": 3865.15,
+      "revenue": 504.15
+    },
+    {
+      "date": "2021-12-31",
+      "product": "Cricket shoes",
+      "investment": 16152,
+      "sales": 18413.28,
+      "revenue": 2261.28
+    },
+    {
+      "date": "2022-12-31",
+      "product": "Cricket shoes",
+      "investment": 2303,
+      "sales": 2349.06,
+      "revenue": 46.06
+    },
+    {
+      "date": "2023-12-31",
+      "product": "Product I",
+      "investment": 14806,
+      "sales": 18063.32,
+      "revenue": 3257.32
+    }
+  ];
+  
+  const svgWidth=800;
+  const svgHeight=800;
+  
+  const margin={
+    top:100,
+    left:100,
+    bottom:50,
+    right:50
+  }
+  
+  const width=svgWidth-(margin.left+margin.right);
+  const height=svgHeight-(margin.top+margin.bottom);
+  
+  console.log("Data:",data);
+  const xDomain=d3.extent(data.map(d=>d.sales));
+  const xRange=[0,width];
+  const xScale=d3.scaleLinear()
+  .domain(xDomain)
+  .range(xRange);
+  
+
+  
+  const yDomain=d3.extent(data.map(d=>d.revenue));
+  const yRange=[height,0];
+  const yScale=d3.scaleLinear()
+  .domain(yDomain)
+  .range(yRange);
+  
+ 
+  const xAxis=d3.axisBottom(xScale);
+  const yAxis=d3.axisLeft(yScale);
+
+  d3.select("svg")
+  .append("text")
+  .attr("x", svgWidth / 2)
+  .attr("y", margin.top / 2)
+  .style("text-anchor", "middle")
+  .style("font-size", "24px")
+  .style("font-weight", "bold")
+  .text("Cricket Kit Sales across years");
+  
+  d3.select("svg")
+  .append("g")
+  .attr("class","xAxis")
+  .attr("transform",`translate(${margin.left},${svgHeight-margin.bottom})`);
+  
+  d3.select(".xAxis")
+  .append("g")
+  .call(xAxis.ticks(5).tickFormat(d=>'$ '+d))
+  .selectAll("text")
+  .style("font-size","14px");
+  
+  
+  d3.select("svg")
+  .append("g")
+  .attr("class","yAxis")
+  .attr("transform",`translate(${margin.left},${margin.top})`);
+  
+  d3.select(".yAxis")
+  .append("g")
+  .call(yAxis.ticks(5).tickFormat(d=>'$ '+d))
+   .selectAll("text")
+  .style("font-size","14px");
+  
+  d3.select(".xAxis")
+  .append("text")
+  .text("Sales within the Years")
+  .attr("x",width/2)
+  .attr("y",margin.bottom * 0.7)
+  .style("font-size","18px")
+  .style("font-weight","bold");
+  
+  
+  d3.select(".yAxis")
+  .append("text")
+  .text("Revenue Generated")
+  .style("transform","rotate(270deg)")
+  .attr("x",height/2 * -1)
+  .attr("y",margin.left * 0.6 * -1)
+  .style("font-size","18px")
+  .style("font-weight","bold");
+  
+  
+  d3.select("svg")
+  .append("g")
+  .attr("class","circle-g")
+  .attr("transform",`translate(${margin.left},${margin.top})`);
+  
+  const color={
+    "2021":"blueViolet",
+    "2022":"black",
+    "2023":"yellowgreen"
+  }
+  
+  const div=d3.select(".tooltip");
+  
+  d3.select(".circle-g")
+  .selectAll(".circle")
+  .data(data)
+  .enter()
+  .append("circle")
+  .attr("class","circle")
+  .attr("cx",d=>xScale(d.sales))
+  .attr("cy",d=>yScale(d.revenue))
+  .attr("r",5)
+  .style("fill",d=>color[d3.timeFormat("%Y")(new Date(d.date))])
+  .on("mouseover",function(d){
+    div.transition()
+    .duration(200)
+    .style("opacity",0.9);
+    
+    div.html(""+d3.timeFormat("%Y")(new Date(d.date))+"<br/>"+
+    "Product:"+d.product+"<br/>"+
+    "Sales: $ "+d.sales+"<br/>"+
+    "Revenue: $ "+d.revenue+"<br/>");
+    
+    div.style("left",(d3.event.pageX+10) +"px")
+    .style("top",(d3.event.pageY-30) +"px")
+    
+  })
+  .on("mouseout",function(d){
+    div.transition()
+    .duration(500)
+    .style("opacity",0);
+     });
+  
+  </script>
+</body>
+</html>
